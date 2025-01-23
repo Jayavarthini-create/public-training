@@ -1,0 +1,49 @@
+1. SELECT * FROM Hotels;
+2. SELECT * FROM Hotels WHERE city = 'NEW YORK';
+3. SELECT Name, city FROM Guest ORDER BY City;
+4. SELECT * FROM room WHERE type = 'non-smoking' ORDER BY price 'ASC';
+5. SELECT COUNT (*) FROM Hotels;
+6. SELECT DISTINCT City FROM Guest;
+7. SELECT AVG(Price) AS average_price FROM room;
+8. SELECT h.Name AS Hotel_Name, r.Room_No, r.Type
+FROM Hotel h
+JOIN Room r ON h.Hotel_No = r.Hotel_No;
+9. SELECT h.Name AS Hotel_Name, b.Date_From, r.Room_No
+FROM Hotel h
+JOIN Booking b ON h.Hotel_No = b.Hotel_No
+JOIN Room r ON b.Room_No = r.Room_No
+WHERE h.City = 'New York';
+10. SELECT COUNT(*)
+FROM Booking
+WHERE EXTRACT(MONTH FROM TO_DATE(Date_From, 'DD-MON-YY')) = 9;
+11. SELECT g.Name, g.City
+FROM Guest g
+JOIN Booking b ON g.Guest_No = b.Guest_No
+JOIN Hotel h ON b.Hotel_No = h.Hotel_No
+WHERE EXTRACT(MONTH FROM TO_DATE(b.Date_From, 'DD-MON-YY')) = 8
+AND h.City = 'New York';
+12. SELECT h.Name AS Hotel_Name, r.Room_No
+FROM Hotel h
+JOIN Room r ON h.Hotel_No = r.Hotel_No
+LEFT JOIN Booking b ON r.Room_No = b.Room_No
+WHERE b.Room_No IS NULL;
+13. SELECT h.Name AS Hotel_Name, h.City
+FROM Hotel h
+JOIN Room r ON h.Hotel_No = r.Hotel_No
+ORDER BY r.Price DESC
+FETCH FIRST 1 ROWS ONLY;
+14. SELECT h.Name AS Hotel_Name, r.Room_No, h.City, r.Price
+FROM Hotel h
+JOIN Room r ON h.Hotel_No = r.Hotel_No
+WHERE r.Price < (
+    SELECT MIN(r2.Price)
+    FROM Room r2
+    JOIN Hotel h2 ON r2.Hotel_No = h2.Hotel_No
+    WHERE h2.City = 'Boston'
+);
+15. SELECT h.City, AVG(r.Price) AS Average_Price
+FROM Hotel h
+JOIN Room r ON h.Hotel_No = r.Hotel_No
+GROUP BY h.City;
+
+
