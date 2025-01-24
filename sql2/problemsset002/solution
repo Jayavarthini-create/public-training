@@ -1,0 +1,48 @@
+1. SELECT SUM(weight) AS total_corn_weight
+FROM picked
+WHERE plantFK = 2;
+2. UPDATE picked
+SET locationFK = 1
+WHERE gardenerFK = 3
+AND plantFK = 3;
+3. ALTER TABLE gardener
+ADD Exper NUMBER(30);
+ALTER TABLE gardener
+MODIFY Exper VARCHAR2(30);
+4. SELECT p.name AS plant_name
+FROM plant p
+JOIN planted pl ON p.plantid = pl.plantFK
+WHERE pl.date1 = TO_DATE('14-APR-2012', 'DD-MON-YYYY')
+AND pl.seeds < 20;
+5. SELECT name, sunlight, water
+FROM plant
+WHERE name LIKE 'C%' OR name LIKE 'R%';
+6. SELECT p.name AS plant_name, SUM(pl.seeds) AS total_seeds
+FROM plant p
+JOIN planted pl ON p.plantid = pl.plantFK
+GROUP BY p.name
+ORDER BY p.name DESC;
+7. SELECT p.name AS plant_name,
+       (SUM(pk.amount) / SUM(pl.seeds)) AS avg_items_per_seed
+FROM plant p
+JOIN planted pl ON p.plantid = pl.plantFK
+JOIN picked pk ON pl.plantFK = pk.plantFK
+GROUP BY p.name;
+8. SELECT g.name AS gardener_name, p.name AS plant_name, pk.date1 AS pick_date, pk.amount
+FROM gardener g
+JOIN picked pk ON g.gardenerid = pk.gardenerFK
+JOIN plant p ON pk.plantFK = p.plantid
+WHERE pk.amount > 0
+ORDER BY g.name, p.name, pk.date1;
+9. SELECT g.name AS gardener_name
+FROM gardener g
+JOIN planted pl ON g.gardenerid = pl.gardenerFK
+JOIN picked pk ON pl.gardenerFK = pk.gardenerFK AND pl.locationFK = pk.locationFK
+WHERE pl.locationFK = pk.locationFK;
+10. CREATE VIEW August_Picked_Except_West AS
+SELECT DISTINCT p.name AS plant_name
+FROM picked pk
+JOIN plant p ON pk.plantFK = p.plantid
+WHERE pk.date1 BETWEEN TO_DATE('01-AUG-2012', 'DD-MON-YYYY') AND TO_DATE('31-AUG-2012', 'DD-MON-YYYY')
+AND pk.locationFK != 2;
+
